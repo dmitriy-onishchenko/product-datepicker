@@ -3,6 +3,7 @@ import 'react-dates/initialize';
 import moment from 'moment';
 import ru from 'moment/locale/ru';
 import uk from 'moment/locale/uk';
+import Pickup from './components/Pickup';
 import DatesPeriod from './components/DatesPeriod';
 import DatePickerMobile from './components/DatePickerMobile';
 import 'react-dates/lib/css/_datepicker.css';
@@ -21,6 +22,7 @@ class App extends Component {
     		calendarFocused: false,
 			days: null,
 			init: false,
+			deliveries: null,
 			minDate: moment(),
             startDate: null,
             endDate: null,
@@ -45,6 +47,7 @@ class App extends Component {
 
 	onChangeStartTime = (event) => {
 		let bookingData = {
+			...this.state.bookingData,
 			start: this.state.bookingData.start,
 			end: this.state.bookingData.end,
 			start_t: event.target.value,
@@ -59,6 +62,7 @@ class App extends Component {
 
 	onChangeEndTime = (event) => {
 		let bookingData = {
+			...this.state.bookingData,
 			start: this.state.bookingData.start,
 			end: this.state.bookingData.end,
 			start_t: this.state.bookingData.start_t,
@@ -71,11 +75,44 @@ class App extends Component {
 		}, 0)
 	}
 
+	onChangeAddress = (place) => {
+		this.setState({
+			bookingData: {
+				...this.state.bookingData,
+				deliveryId: place.id,
+				address: place.address,
+				coordinates: place.coordinates
+			}
+		});
+		
+		setTimeout(() => {
+			this.fetchData();
+		}, 0)
+	}
+
+	onChangeDelivery = (id) => {
+		let bookingData = {
+			...this.state.bookingData,
+			deliveryId: id
+		}
+
+		delete bookingData.address;
+		delete bookingData.coordinates;
+
+		this.setState({
+			bookingData: bookingData
+		});
+		setTimeout(() => {
+			this.fetchData();
+		}, 0)
+	}
+
 	onDatesChangeMobile = (startDate, endDate) => {
 		this.setState({startDate, endDate})
 		const start_date = startDate.format('DD.MM.YYYY');
 		const end_date = endDate.format('DD.MM.YYYY');
 		let bookingData = {
+			...this.state.bookingData,
 			start: start_date,
 			end: end_date,
 			start_t: this.state.bookingData.start_t,
@@ -95,6 +132,7 @@ class App extends Component {
 			const start_date = startDate.format('DD.MM.YYYY');
 			const end_date = endDate.format('DD.MM.YYYY');
 			let bookingData = {
+				...this.state.bookingData,
 				start: start_date,
 				end: end_date,
 				start_t: this.state.bookingData.start_t,
@@ -122,9 +160,10 @@ class App extends Component {
 				filter: _this.state.bookingData
 			}
 		}).then(function(res) {
-			console.log(res.data)
 			if (res.data.isSuccess) {
-				_this.setState({prices: res.data.prices, sum: res.data.sum, error_message: null});
+				const deliveries = res.data.deliveries;
+
+				_this.setState({prices: res.data.prices, deliveries: deliveries, sum: res.data.sum, error_message: null});
 				$('.js-booking-button').removeAttr('disabled').removeClass('is-loading');
 				$('.price.font-bold.font_mxs').html(res.data.formatted_rate);
 			} else {
@@ -174,9 +213,27 @@ class App extends Component {
         return timeDifferenceInDays;
     }
 
+	fetchDeliveryData() {
+		const _this = this;
+
+		fetch('https://tachki.wvdev.com.ua/dev/calendar/calculate.php')
+			.then((res) => {
+				return res.json()
+			})
+			.then((data) => {
+				const deliveries = data.data.deliveries;
+
+				_this.setState({
+					deliveries: deliveries
+				});
+			})
+	}
+
+
 	getCarsData() {
 		const _this = this;
 
+		// this.fetchDeliveryData();
 		// fetch('https://tachki.wvdev.com.ua/dev/calendar/init_product.php')
 		// 	.then((res) => {
 		// 		return res.json()
@@ -256,7 +313,6 @@ class App extends Component {
 				setTimeout(() => {
 					_this.fetchData();
 				}, 0)
-				console.log(res);
 			}).catch(function (res) {
 				console.log(res);
 			});
@@ -284,7 +340,6 @@ class App extends Component {
 					datesBlocked: new_obj,
 					car_prices: result.prices
 				});
-                console.log(res.data);
             }).catch(function (res) {
                 console.log(res);
             });
@@ -331,6 +386,13 @@ class App extends Component {
 						timeEnd={this.state.timeEnd}
 						onDatesChange={this.onDatesChange}
 					/>
+				}
+
+				{this.state.deliveries &&
+					<Pickup 
+						deliveries={this.state.deliveries} 
+						onChangeDelivery={this.onChangeDelivery} 
+						onChangeAddress={this.onChangeAddress}/>
 				}
 
 				{this.state.datesBlocked && this.state.startDate && this.state.isShowMobileDatepicker &&
