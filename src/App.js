@@ -216,7 +216,7 @@ class App extends Component {
 	fetchDeliveryData() {
 		const _this = this;
 
-		fetch('https://tachki.wvdev.com.ua/dev/calendar/calculate.php')
+		fetch('https://market.wvdev.com.ua/dev/calendar/calculate.php')
 			.then((res) => {
 				return res.json()
 			})
@@ -234,7 +234,7 @@ class App extends Component {
 		const _this = this;
 
 		// this.fetchDeliveryData();
-		// fetch('https://tachki.wvdev.com.ua/dev/calendar/init_product.php')
+		// fetch('https://market.wvdev.com.ua/dev/calendar/init_product.php')
 		// 	.then((res) => {
 		// 		return res.json()
 		// 	})
@@ -261,7 +261,7 @@ class App extends Component {
 		// 		})
 		// 	});
 
-		// fetch('https://tachki.wvdev.com.ua/dev/calendar/product.php')
+		// fetch('https://market.wvdev.com.ua/dev/calendar/product.php')
 		// 	.then((res) => {
 		// 		return res.json()
 		// 	})

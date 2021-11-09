@@ -3,7 +3,7 @@ import 'react-dates/initialize';
 import moment from 'moment';
 import 'moment/locale/ru';
 import { DateRangePicker, isInclusivelyAfterDay } from 'react-dates';
-import { isMobile} from "react-device-detect";
+import { isMobile } from "react-device-detect";
 import 'react-dates/lib/css/_datepicker.css';
 import './style.css';
 

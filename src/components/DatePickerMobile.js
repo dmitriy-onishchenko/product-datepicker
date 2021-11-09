@@ -117,7 +117,7 @@ class DatePickerMobile extends Component {
         }
 
         return (
-            <div className="Datepicker Datepicker_Mobile" style={{ height: window.innerHeight, paddingTop: this.state.headerHeight + 15 }}>
+            <div className="Datepicker Datepicker_Mobile">
                 <DatepickerHeader
                     onReset={this.onReset}
                     onHeaderHeightInit={this.onHeaderHeightInit}
@@ -126,7 +126,7 @@ class DatePickerMobile extends Component {
                     endDate={this.state.endDate}
                     time_end={this.state.time_end}
                 />
-                <div className={`Datepicker-wrapp ${this.state.selectOnlyStart ? 'is-selecting-start' : ''}`} style={{height: heightWrapp}}>
+                <div className={`Datepicker-wrapp ${this.state.selectOnlyStart ? 'is-selecting-start' : ''}`}>
                     <DayPickerRangeController
                         startDate={this.state.startDate}
                         endDate={this.state.endDate}

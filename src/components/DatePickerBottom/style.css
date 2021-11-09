@@ -1,9 +1,9 @@
 .Datepicker-bottom {
+    position: absolute;
     left: 0;
     bottom: 0;
     z-index: 3;
     width: 100%;
-    border-top: 1px solid #757575;
     background: #111;
 }
 

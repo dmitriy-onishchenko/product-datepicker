@@ -23,6 +23,9 @@ class Pickup extends Component {
         })
 
         this.props.onChangeDelivery(activeDelivery[0].id);
+        setTimeout(() => {
+            $(".pac-container").appendTo(".search-form__location-block");
+        }, 1000);
     };
 
     componentDidMount() {
@@ -45,7 +48,7 @@ class Pickup extends Component {
                     {this.state.activeDelivery && this.state.activeDelivery.is_address &&
                         <div className="search-form__location-block">
                             <Autocomplete
-                                apiKey="AIzaSyBnyifhTMQlwtMMZn5mSfzdFCbElhMFDTI"
+                                apiKey="AIzaSyCJdsrMbiEfniNMLZMTws46sz9XiE_Y0nY"
                                 type="text"
                                 id="location"
                                 className="search-form__location-field"
